@@ -1,0 +1,23 @@
+# Setup the environment for producing the results in the paper
+# Activate the environmet to run your code using "source activate my-paper"
+# or "activate my-paper" on Windows.
+name: termoo-solver
+channels:
+    # Prioritize packages from conda-forge to avoid conflicts with defaults
+    - conda-forge
+    - defaults
+dependencies:
+    # Lis the dependencies here. It's good practice to specify the exact
+    # versions. Use 'conda list' to see your currently installed packages and
+    # their versions.
+    - python=3.8
+    - pip
+    - setuptools
+    - numpy
+    - pandas
+    - matplotlib
+    - nltk
+    - jupyter
+    - pylint
+    - flake8
+    - black
