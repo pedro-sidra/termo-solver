@@ -1,3 +1,6 @@
 [submodule "palavras"]
 	path = palavras
 	url = https://github.com/pythonprobr/palavras
+[submodule "pt-br"]
+	path = pt-br
+	url = https://github.com/fserb/pt-br
