@@ -1,6 +1,6 @@
 # Termo-Solver
 
-Helper for solving [termo.ooo](https://termo.ooo) with statistics.
+Helper for solving [term.ooo](https://term.ooo) with statistics.
 
 ## Install
 
