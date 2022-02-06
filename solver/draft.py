@@ -10,12 +10,18 @@ words = words.words()
 
 #%%
 import codecs
+from unidecode import unidecode
 with codecs.open("palavras/palavras.txt","r", encoding="utf-8") as f:
     words = f.read().split()
 
+#%%
+import codecs
+from unidecode import unidecode
+with codecs.open("pt-br/dicio","r", encoding="utf-8") as f:
+    words = f.read().split()
 
 # %%
-fiveletter = [w for w in words if len(w)==5]
+fiveletter = [unidecode(w) for w in words if len(w)==5]
 # %%
 fiveletter
 

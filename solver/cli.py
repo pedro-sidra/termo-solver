@@ -1,5 +1,5 @@
-import prob
-from prob import alphabet
+import solver.prob as prob
+from solver.prob import alphabet
 import re
 import argparse
 import pandas as pd
@@ -72,8 +72,7 @@ def print_best(probs, topN=5):
 def replacechar(s, index, new):
     return s[:index] + new + s[index + 1:]
 
-
-if __name__=="__main__":
+def main():
     parser = argparse.ArgumentParser(description='Helps you play term.ooo!')
 
     parser.add_argument(
@@ -157,52 +156,6 @@ if __name__=="__main__":
                     gray+=word[i]
             yellow_pos.append(yellowItem)
             subset = filter_words(subset, green, gray, yellow_pos).reset_index(drop=True)
-            
 
-
-
-    
-
-
-    # # word = "cairo"
-    # green= "--o-e"
-    # yellow_pos= [
-    #     "---et",
-    #     "st---",
-    # ]
-    # yellow = [letter for letter in "".join(yellow_pos) if letter !="-"]
-    # gray="carl"
-
-    # subset = data
-    # for i, char in enumerate(green):
-    #     if char=="-":
-    #         continue
-
-    #     subset = subset.query(f"`{i+1}`=={alphabet.index(char)}")
-    # # %%
-    # def query_contains(df, letter):
-    #     index = alphabet.index(letter)
-    #     return df.query(f"`1`=={index} or `2`=={index} or `3`=={index} or `4`=={index} or `5`=={index}")
-
-    # def query_does_not_contain(df, letter):
-    #     index = alphabet.index(letter)
-    #     return df.query(f"`1`!={index} and `2`!={index} and `3`!={index} and `4`!={index} and `5`!={index}")
-
-
-    # # %%
-    # for letter in yellow:
-    #     subset = query_contains(subset, letter)
-    # for letter in gray:
-    #     subset = query_does_not_contain(subset, letter)
-    # # %%
-    # for frase in yellow_pos:
-    #     for i, letter in enumerate(frase):
-    #         if letter != "-":
-    #             subset = subset.query(f"`{i+1}` != {alphabet.index(letter)}")
-
-    # # %%
-    # subset.sort_values(by="prob_greenyellow").tail(n=20)
-
-    # # %%
-
-    # # %%
+if __name__=="__main__":
+    main()

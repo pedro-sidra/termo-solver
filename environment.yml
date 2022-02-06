@@ -11,7 +11,6 @@ dependencies:
     # versions. Use 'conda list' to see your currently installed packages and
     # their versions.
     - python=3.8
-    - pip
     - setuptools
     - numpy
     - pandas
@@ -22,3 +21,5 @@ dependencies:
     - flake8
     - black
     - unidecode
+    - pip:
+        - -e .
