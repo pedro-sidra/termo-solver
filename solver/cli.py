@@ -84,7 +84,7 @@ def main():
     fiveLetter = re.compile("^[a-zA-Z]{5}$")
     guessRegexp = re.compile("^[yg\-]{5}$")
 
-    words = prob.wordVecDataframe()
+    words = prob.wordVecDataframe(language=args.lang)
 
     print("press q to quit... ")
     command=""

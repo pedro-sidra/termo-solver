@@ -12,8 +12,8 @@ import os
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 def loadENWords():
-    nltk.data.path.append('/work/words')
-    # words = nltk.download('words', download_dir='/work/words')
+    # nltk.data.path.append('/work/words')
+    nltk.download('words')
     return nltk_words.words()
 
 def loadPTWords():
@@ -49,7 +49,7 @@ def wordVecDataframe(language="pt", n_letters=5):
     # Example item from the `data` list:
     # {"word":"termo", 0:"t", 1:"e", 2:"r", 3:"m", 4:"o"}
     data = [  {"word":word,
-               **{i:l for i,l in enumerate(word)}}
+               **{i:l.lower() for i,l in enumerate(word)}}
             for word in words]
     
     df = pd.DataFrame(data)
