@@ -1,21 +1,25 @@
 #%%
 import nltk
-from nltk.corpus import words
+from nltk.corpus import words as nltk_words
 import codecs
 from unidecode import unidecode
 import re
 import pandas as pd
 import numpy as np
+import os
+
 
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 def loadENWords():
     nltk.data.path.append('/work/words')
-    words = nltk.download('words', download_dir='/work/words')
-    return words.words()
+    # words = nltk.download('words', download_dir='/work/words')
+    return nltk_words.words()
 
 def loadPTWords():
-    with codecs.open("pt-br/dicio","r", encoding="utf-8") as f:
+    _file_path = os.path.realpath(__file__)
+    _folder_path,_ = os.path.split(_file_path)
+    with codecs.open(f"{_folder_path}/../pt-br/dicio","r", encoding="utf-8") as f:
         words = f.read().split()
     return words
     
