@@ -20,6 +20,8 @@ termo-solver
 
 ## Disclaimer
 
-Under development!
+**Under development!**
+
 This currently has some conceptual errors, you can review the code in prob.py and cli.py.
+
 Make suggestions as issues if you want :)
