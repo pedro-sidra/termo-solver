@@ -107,9 +107,41 @@ def setOfLetters(vec):
 
 def bagOfLettersVec(vec):
     idxs = setOfLetters(vec)
-    vec = np.zeros(len(alphabet))
+    vec = np.zeros(len(alphabet), dtype=np.uint8)
     vec[idxs]=1
     return vec
+
+_bits = 2**(np.arange(5))
+def codedLettersVec(inp):
+    global _bits
+
+    if len(_bits)!=len(inp):
+        _bits = 2**(np.arange(len(inp)))
+
+    idxs = setOfLetters(inp)
+
+    vec = np.zeros(len(alphabet), dtype=np.uint8)
+
+    # Bit-encoding of letter placement in word
+    codes = [np.sum(_bits*(inp==i)) for i in idxs]
+
+    vec[idxs]=codes
+    return vec
+
+def wordCodes(words):
+    return np.stack(words.iloc[:,1:].apply(codedLettersVec, axis=1))
+
+def decodeWord(word):
+    idxs = np.where(word!=0)[0]
+    
+    positions = [np.unpackbits(a,bitorder="little") for a in word[idxs]]
+    letters = ["-",]*5
+
+    for idx, pos in zip(idxs, positions):
+        for i,p in enumerate(pos):
+            if p!=0:
+                letters[i] = num2leter(idx)
+    return "".join(letters).strip()
 
 def prob_yellow(vec, dfreq):
     """
@@ -138,4 +170,10 @@ def calcProbabilities(df):
     output["prob_greenyellow"] = p_hit*p_yellow
 
     return output
+
+def lettersOfSet(letterSet):
+    return "".join([num2leter(n) for n in np.where(letterSet!=0)[0]])
+
+def lettersOfVec(vec):
+    return "".join([num2leter(n) for n in vec])
 # %%
