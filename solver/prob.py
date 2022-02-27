@@ -111,25 +111,39 @@ def bagOfLettersVec(vec):
     vec[idxs]=1
     return vec
 
+# def codedLettersVec(inp):
+#     global _bits
+
+#     if len(_bits)!=len(inp):
+#         _bits = 2**(np.arange(len(inp)))
+
+#     idxs = setOfLetters(inp)
+
+#     vec = np.zeros(len(alphabet), dtype=np.uint8)
+
+#     # Bit-encoding of letter placement in word
+#     codes = [np.sum(_bits*(inp==i)) for i in idxs]
+
+#     vec[idxs]=codes
+#     return vec
+
 _bits = 2**(np.arange(5))
-def codedLettersVec(inp):
+def wordCodes(wordVec):
     global _bits
+    n, let = wordVec.shape
 
-    if len(_bits)!=len(inp):
-        _bits = 2**(np.arange(len(inp)))
+    if len(_bits)!=let:
+        _bits = 2**(np.arange(let))
 
-    idxs = setOfLetters(inp)
+    codes = np.zeros((n, let*26))
+    offs = np.arange(let)*26
 
-    vec = np.zeros(len(alphabet), dtype=np.uint8)
+    for i, vec in enumerate(offs+wordVec):
+        codes[i, vec]=1
 
-    # Bit-encoding of letter placement in word
-    codes = [np.sum(_bits*(inp==i)) for i in idxs]
-
-    vec[idxs]=codes
-    return vec
-
-def wordCodes(words):
-    return np.stack(words.iloc[:,1:].apply(codedLettersVec, axis=1))
+    codes=codes.reshape(-1, let,26)
+    return (_bits@codes).astype(np.uint8)
+    # return np.stack(words.iloc[:,1:].apply(codedLettersVec, axis=1))
 
 def decodeWord(word):
     idxs = np.where(word!=0)[0]
