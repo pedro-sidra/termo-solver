@@ -22,6 +22,10 @@ termo-solver
 
 **Under development!**
 
-This currently has some conceptual errors, you can review the code in prob.py and cli.py.
+Currently the code in `cli.py` is very incorrect.
 
-Make suggestions as issues if you want :)
+The more correct analysis is in `notebook/tree.ipynb` and `notebook/vetorize.ipynb`.
+
+I went a little overboard with the vectorized operations, but it was fun!
+
+Feel free to open issues and PRs.
