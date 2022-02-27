@@ -22,5 +22,6 @@ dependencies:
     - black
     - unidecode
     - gmpy2
+    - scipy
     - pip:
         - -e .
