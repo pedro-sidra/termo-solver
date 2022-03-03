@@ -25,7 +25,7 @@ def loadPTWords():
     
 def getNLetterWords(dictionary, n=5):
     # Unidecode gets rid of any ~ ´ or ^
-    filtered = [unidecode(w) for w in dictionary]
+    filtered = [unidecode(w).lower() for w in dictionary]
     # Valid words: only letters a-z, exactly 5
     fiveLetter = re.compile("^[a-zA-Z]{"+str(n)+"}$")
     # Check that there is no weird characters
@@ -59,7 +59,7 @@ def wordVecDataframe(language="pt", n_letters=5):
     df.iloc[:,1:] = df.iloc[:,1:].applymap(letter2num)
 
 
-    df = df.drop_duplicates()
+    df = df.drop_duplicates().reset_index(drop=True)
 
     return df
 
