@@ -15,6 +15,8 @@ Then to use the solver script:
 
 ```bash
 conda activate ./.env
+cd solver
+python generate_matches.py # (this is WIP)
 termo-solver
 ```
 
