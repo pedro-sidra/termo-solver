@@ -1,4 +1,3 @@
-#%%
 import nltk
 from nltk.corpus import words as nltk_words
 import codecs
@@ -7,7 +6,6 @@ import re
 import pandas as pd
 import numpy as np
 import os
-
 
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 
@@ -62,45 +60,6 @@ def wordVecDataframe(language="pt", n_letters=5):
     df = df.drop_duplicates().reset_index(drop=True)
 
     return df
-
-def letterFreqs(wordVecDf):
-    """
-    
-    retuns: local, global
-    letter frequencies by letter-spot and by letter
-    """
-    # Get value counts for each letter in each word position
-    freqs = [wordVecDf[k].value_counts(normalize=True)
-            for k in wordVecDf.iloc[:,1:]]
-
-    # Get dataframe with columns-> positions and index->letter idx
-    freqs = (pd.DataFrame(freqs)
-            .transpose()
-            .sort_index()
-            .fillna(0))
-    
-    freqs = freqs.reindex(range(len(alphabet)))
-    
-    freqs = freqs.fillna(0)
-
-    # Sum letter frequencies for all spots, divide by total (total = num of letters)
-    freqs["global"] = freqs.sum(axis=1)/freqs.sum().sum()
-
-    freqs = freqs.fillna(0)
-
-    return freqs
-
-def letterVec2LetterFreq(df, dfreq=None):
-    
-    if dfreq is None:
-        dfreq = letterFreqs(df)
-
-    def letter_prob(letter, pos):
-        return dfreq.iloc[letter, pos]
-
-    return df.iloc[:,1:].apply(lambda col: 
-        letter_prob(col.astype(int),col.name)
-            .reset_index(drop=True))
 
 def setOfLetters(vec):
     return list(set(vec))
@@ -157,37 +116,101 @@ def decodeWord(word):
                 letters[i] = num2leter(idx)
     return "".join(letters).strip()
 
-def prob_yellow(vec, dfreq):
-    """
-    given a letter-position vector and letter frequency df,
-    return probability that words in the dataset contain at least one of 
-    the letters in vec
-    """
-    letters = setOfLetters(vec)
-    probs = dfreq["global"].iloc[letters]
-    return 1 - (1-probs).product()
-
-def calcProbabilities(df):
-
-    output = pd.DataFrame(data={"word":df["word"]})
-    dfreq = letterFreqs(df)
-
-    p_byLetter = letterVec2LetterFreq(df, dfreq=dfreq)
-    p_noHitByLetter = 1 - p_byLetter
-    p_noHit = p_noHitByLetter.product(axis=1)
-    p_hit = 1 - p_noHit
-
-    p_yellow = df.iloc[:,1:].apply(lambda x: prob_yellow(x, dfreq), axis=1)
-
-    output["prob_green"] = p_hit
-    output["prob_yellow"] = p_yellow
-    output["prob_greenyellow"] = p_hit*p_yellow
-
-    return output
-
 def lettersOfSet(letterSet):
     return "".join([num2leter(n) for n in np.where(letterSet!=0)[0]])
 
 def lettersOfVec(vec):
     return "".join([num2leter(n) for n in vec])
+
+def decodeToBits(c):
+    return np.asarray([np.unpackbits(i, bitorder="little")[:5] for i in c])
+
+def match_code(arr):
+    return np.sum(_bitValues*arr, axis=1)
+
+_bitValues = 2**np.arange(5)
+def get_green_matches(codeword, codeset):
+    greens = codeword&codeset
+    return greens
+
+def codify_matches(codedMatches):
+    n = len(codedMatches)
+    bits = (np.unpackbits(codedMatches.flatten(),bitorder="little")
+        .reshape( (n, 26, 8) )
+        [:,:,:5]
+        )
+    matches =  np.sum(bits, axis=1)
+    # return [str(m) for m in matches]
+    # return matches
+    return match_code(matches)
+
+    
+def log2impl(x):
+    output = np.zeros_like(x)
+    vals = 2**np.arange(8)
+    itr = list(enumerate(vals))
+    for i, num in (itr):
+        output[ x - num >= 0 ] = i
+    
+    return output
+
+def bit_count(arr):
+     # Make the values type-agnostic (as long as it's integers)
+     t = arr.dtype.type
+     mask = t(-1)
+     s55 = t(0x5555555555555555 & mask)  # Add more digits for 128bit support
+     s33 = t(0x3333333333333333 & mask)
+     s0F = t(0x0F0F0F0F0F0F0F0F & mask)
+     s01 = t(0x0101010101010101 & mask)
+
+     arr = arr - ((arr >> 1) & s55)
+     arr = (arr & s33) + ((arr >> 2) & s33)
+     arr = (arr + (arr >> 4)) & s0F
+     return (arr * s01) >> (8 * (arr.itemsize - 1))
+
+def get_yellow_matches(codeword, codeset, greens):
+    # ~codeset: has a 5-bit mask for each letter, 
+    #           with 1s where that letter is not located on the word
+    #           (consequently the 5-bit mask=11111 for letters not in the word)
+    # ~codeset * codeset!=0: eliminates the erroneous 5-bit masks for letters that are not in the word
+    # yellow: has 1s where the letter in the codeword matches a letter in the codeset,
+    #         but not in the same position
+    # nongreen = codeset & ((~greens)*(greens!=0))
+    # codeset = codeset 
+    nongreen = codeset & ~greens
+    yellow = (((~codeset)*(codeset!=0)))&codeword
+    yellow = yellow & ~greens
+
+    # Yellow is not as expected
+    # Example:
+    #    codeword   = traca
+    #    codeset[i] = pavos
+    #    yellow =     --y-y
+    #should be  =     --y--
+    # Because the count of letters should be considered. 
+    # E.g. --y-y implies there are two 'a's in the match
+
+    # Correct for different count of matches
+
+    # Popcount = number of nonzero bits in each letter
+    # if there are more nonzero bits in the match than in the original word,
+    # correct it
+    wrong = bit_count(yellow.astype(np.uint8)) > bit_count(nongreen.astype(np.uint8))
+    while np.any(wrong):
+
+        # This MIGHT be better performance
+        # highestbits = 1<<log2impl(yellow.astype(int))
+        # highestbits[yellow==0] = 0
+
+        highestbits = 2**np.floor(np.log2(yellow))
+
+        corrections = wrong * highestbits
+        corrections = corrections.astype(np.uint8)
+
+        yellow = (yellow & (~corrections))
+        # Recompute the `wrong` mask (corrections only clears one bit, there might be more)
+        wrong = bit_count(yellow.astype(np.uint8)) > bit_count(nongreen.astype(np.uint8))
+        yellow=yellow.astype(np.uint8)
+
+    return yellow
 # %%

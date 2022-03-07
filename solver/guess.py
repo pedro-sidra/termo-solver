@@ -69,6 +69,7 @@ def get_guess(guesses, matches, return_subset=False):
         subset = subWords.sort_values(by= "information", ascending=False)
         return best_guesses, subset
     else:
+        best_guesses = words.sort_values(by=[ "information","inSubset" ], ascending=False).head(n=5)["words"]
         return best_guesses
 
 if __name__=="__main__":

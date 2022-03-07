@@ -3,7 +3,7 @@ import argparse
 import pandas as pd
 import os
 
-file_path = os.path.realpath(__file__)
+
 
 def printHeader(message):
     print(f"+============={message}=============+")
