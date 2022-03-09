@@ -10,10 +10,14 @@ def main():
     i = 0
     player.send_word(words[i])
     while i < 6:
-        state = player.get_state()
-        matches = [match for match in state.split(",") if len(match) > 0]
+        state = player.get_state().split(",")
 
-        print(matches)
+        matches = [match for match in state if len(match) > 0]
+
+        if matches[-1] == "ggggg":
+            print("you won!")
+            return state
+            
         for word in guess.get_guess(words, matches):
             if player.send_word(word):
                 words.append(word)
@@ -21,10 +25,9 @@ def main():
                 break
         else:
             print("OOPS")
-
         
 
 
 
 if __name__=="__main__":
-    main()
+    print(main())
