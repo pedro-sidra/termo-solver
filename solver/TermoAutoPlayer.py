@@ -2,6 +2,7 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
 from pyshadow.main import Shadow
 import time
 
@@ -17,9 +18,9 @@ class TermoAutoPlayer:
         if headless:
             options.add_argument("--headless")
             # Fetch recent ChromeDriver and run headless
-            self.driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
+            self.driver = ChromeDriver(ChromeDriverManager().install(), chrome_options=options)
         else:
-            self.driver = webdriver.Chrome(ChromeDriverManager().install())
+            self.driver = ChromeDriver(ChromeDriverManager().install())
 
 
         self.driver.get(url)

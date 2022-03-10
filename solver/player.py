@@ -1,5 +1,6 @@
-import guess
-from TermoAutoPlayer import TermoAutoPlayer
+import solver.guess as guess
+import time
+from solver.TermoAutoPlayer import TermoAutoPlayer
 
 def main():
     words = ["cario"] #guess.first_guess()
@@ -9,6 +10,7 @@ def main():
 
     i = 0
     player.send_word(words[i])
+    time.sleep(0.5)
     while i < 6:
         state = player.get_state().split(",")
 
@@ -24,7 +26,8 @@ def main():
                 i+=1
                 break
         else:
-            print("OOPS")
+            print("failed to input all words in guess... giving up!")
+            return None
         
 
 
