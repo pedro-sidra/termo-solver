@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 file_path = Path(os.path.realpath(__file__))
-read = np.load(f"{file_path.parent}/matches.npz", allow_pickle=True)
+read = np.load(f"matches.npz", allow_pickle=True)
 
 greens = read["greens"]
 yellows = read["yellows"]
