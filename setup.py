@@ -8,7 +8,9 @@ setup(
    author_email='pedrosidra0@gmail.com',
    packages=['solver'],  #same as name
     entry_points = {
-        'console_scripts': ['termo-solver=solver.cli:main'],
+        'console_scripts': ['termo-solver=solver.cli:main',
+                            'termo-player=solver.player:main'
+        ],
     }
 
 )
