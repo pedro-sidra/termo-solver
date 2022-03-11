@@ -2,10 +2,8 @@ import solver.guess as guess
 import time
 from solver.TermoAutoPlayer import TermoAutoPlayer
 
-def play_termo():
+def play_termo(player:TermoAutoPlayer):
     words = ["cario"] #guess.first_guess()
-
-    player = TermoAutoPlayer(headless=False)
 
     i = 0
     player.send_word(words[i])
@@ -32,4 +30,4 @@ def play_termo():
 
 
 if __name__=="__main__":
-    print(play_termo())
+    print(play_termo(TermoAutoPlayer(headless=False)))
