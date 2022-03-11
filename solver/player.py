@@ -2,21 +2,20 @@ import solver.guess as guess
 import time
 from solver.TermoAutoPlayer import TermoAutoPlayer
 
-def main():
+def play_termo():
     words = ["cario"] #guess.first_guess()
 
     player = TermoAutoPlayer(headless=False)
-
 
     i = 0
     player.send_word(words[i])
     time.sleep(0.5)
     while i < 6:
-        state = player.get_state().split(",")
+        state = player.get_state()
 
-        matches = [match for match in state if len(match) > 0]
+        matches = [match for match in state.split("\n") if len(match) > 0]
 
-        if matches[-1] == "ggggg":
+        if matches[-1] == "🟩🟩🟩🟩🟩":
             print("you won!")
             return state
             
@@ -33,4 +32,4 @@ def main():
 
 
 if __name__=="__main__":
-    print(main())
+    print(play_termo())

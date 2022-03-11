@@ -35,8 +35,8 @@ def first_guess():
 
 _bitValues = 2**np.arange(5)
 def match_to_code(matchstring):
-    green = 1*np.asarray([l=="g" for l in matchstring])
-    yellow = 1*np.asarray([l=="y" for l in matchstring])
+    green = 1*np.asarray([l=="🟩" for l in matchstring])
+    yellow = 1*np.asarray([l=="🟨" for l in matchstring])
     return np.sum(_bitValues*green) + (np.sum(_bitValues*yellow) << 5)
 
 def get_guess(guesses, matches, return_subset=False):

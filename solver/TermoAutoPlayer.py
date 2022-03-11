@@ -54,19 +54,19 @@ class TermoAutoPlayer:
           # If the word was invalid, send some backspaces to clear it
           for i in range(5):
             self.send_keys(Keys.BACKSPACE)
-            # time.sleep(0.1)
+            time.sleep(0.1)
           return False
-        
+
         # If we got here, the word was valid
         return True
 
     def get_state(self):
         """ Get the 'board state' of the game, containing all letters and clues
         :returns: state, a string which indicates the state of the game, where:
-                  * '-' means a wrong letter
-                  * 'y' means a yellow letter 
-                  * 'g' means a green letter
-                  * ',' separates lines (`state` always has 6 lines)
+                  * '⬛' means a wrong letter
+                  * '🟨' means a yellow letter
+                  * '🟩' means a green letter
+                  * '\n' separates lines (`state` always has 6 lines)
                   * empty characters means that that line was not yet reached
         """
         # Letters are all divs with 'letter' in the class attribute
@@ -89,11 +89,11 @@ class TermoAutoPlayer:
             letter_text = letter.text
 
             if " place" in cls: # Yellow letters have class = "letter place"
-                letterState = "y"
+                letterState = "🟨"
             elif " right" in cls:# Green letters have class = "letter right"
-                letterState = "g"
+                letterState = "🟩"
             elif " wrong" in cls:# Wrong letters have class = "letter wrong"
-                letterState = "-"
+                letterState = "⬛"
             else:
                 letterState = "" # Other letters have class in ["letter empty", "letter edit", "letter"]
 
@@ -104,7 +104,7 @@ class TermoAutoPlayer:
         output = []
         for s in state:
           output.append("".join(s))
-        return ",".join(output)
+        return "\n".join(output)
 
 
 if __name__=="__main__":
