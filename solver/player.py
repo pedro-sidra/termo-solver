@@ -29,5 +29,7 @@ def play_termo(player:TermoAutoPlayer):
 
 
 
-if __name__=="__main__":
+def main():
     print(play_termo(TermoAutoPlayer(headless=False)))
+if __name__=="__main__":
+    main()
