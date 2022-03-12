@@ -61,10 +61,8 @@ def get_guess(guesses, matches, return_subset=False):
     words["inSubset"] = 0
     words.loc[subWords.index,"inSubset"] = 1
 
-    subWords.loc[:,"information"] = words.loc[subWords.index,"information"]
-    
-
     if return_subset:
+        subWords.loc[:,"information"] = words.loc[subWords.index,"information"]
         best_guesses = words.sort_values(by=[ "information","inSubset" ], ascending=False).head(n=5)
         subset = subWords.sort_values(by= "information", ascending=False)
         return best_guesses, subset
