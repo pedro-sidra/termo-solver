@@ -1,5 +1,6 @@
 .env/
 env/
 __pycache__/
-solver.egg-info/
 *.npz
+*.zip
+solver.egg-info/

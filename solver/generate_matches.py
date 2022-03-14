@@ -5,7 +5,8 @@ import numpy as np
 from solver.word_ops import *
 
 
-if __name__=="__main__":
+
+def main():
     words = wordVecDataframe(language="pt")
     codes= wordCodes(words.iloc[:,1:].to_numpy().astype(int))
     print(f"Codes vec: \n{codes}")
@@ -30,3 +31,6 @@ if __name__=="__main__":
 
     file = "matches"
     np.savez(file, greens=greens, yellows=yellows, words=words.iloc[:,0].to_numpy())
+
+if __name__=="__main__":
+    main()

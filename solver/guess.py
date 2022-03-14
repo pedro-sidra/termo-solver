@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 file_path = Path(os.path.realpath(__file__))
-read = np.load(f"{file_path.parent}/matches.npz", allow_pickle=True)
+read = np.load(f"matches.npz", allow_pickle=True)
 
 greens = read["greens"]
 yellows = read["yellows"]
@@ -35,8 +35,8 @@ def first_guess():
 
 _bitValues = 2**np.arange(5)
 def match_to_code(matchstring):
-    green = 1*np.asarray([l=="g" for l in matchstring])
-    yellow = 1*np.asarray([l=="y" for l in matchstring])
+    green = 1*np.asarray([l=="🟩" for l in matchstring])
+    yellow = 1*np.asarray([l=="🟨" for l in matchstring])
     return np.sum(_bitValues*green) + (np.sum(_bitValues*yellow) << 5)
 
 def get_guess(guesses, matches, return_subset=False):
@@ -61,10 +61,8 @@ def get_guess(guesses, matches, return_subset=False):
     words["inSubset"] = 0
     words.loc[subWords.index,"inSubset"] = 1
 
-    subWords.loc[:,"information"] = words.loc[subWords.index,"information"]
-    
-
     if return_subset:
+        subWords.loc[:,"information"] = words.loc[subWords.index,"information"]
         best_guesses = words.sort_values(by=[ "information","inSubset" ], ascending=False).head(n=5)
         subset = subWords.sort_values(by= "information", ascending=False)
         return best_guesses, subset
