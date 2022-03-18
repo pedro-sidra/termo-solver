@@ -15,7 +15,7 @@ def play_termo(player:TermoAutoPlayer):
 
         if matches[-1] == "🟩🟩🟩🟩🟩":
             # success! :)
-            return state
+            return state, words
 
         for word in guess.get_guess(words, matches):
             if player.send_word(word):
@@ -24,7 +24,7 @@ def play_termo(player:TermoAutoPlayer):
                 break
         else:
             # fail! :(
-            return None
+            return None, words
 
 
 
