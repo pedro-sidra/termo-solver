@@ -14,18 +14,18 @@ def play_termo(player:TermoAutoPlayer):
         matches = [match for match in state.split("\n") if len(match) > 0]
 
         if matches[-1] == "🟩🟩🟩🟩🟩":
-            print("you won!")
-            return state
-            
+            # success! :)
+            return state, words
+
         for word in guess.get_guess(words, matches):
             if player.send_word(word):
                 words.append(word)
                 i+=1
                 break
         else:
-            print("failed to input all words in guess... giving up!")
-            return None
-        
+            # fail! :(
+            return None, words
+
 
 
 
