@@ -73,7 +73,15 @@ class TermoAutoPlayer:
         letters = self.shadow.find_elements("div.letter")
 
         # Initialize this array so that random indexing is easier
-        state = [
+        hints = [
+            [ "", "", "", "", ""],
+            [ "", "", "", "", ""],
+            [ "", "", "", "", ""],
+            [ "", "", "", "", ""],
+            [ "", "", "", "", ""],
+            [ "", "", "", "", ""],
+        ]
+        words = [
             [ "", "", "", "", ""],
             [ "", "", "", "", ""],
             [ "", "", "", "", ""],
@@ -89,22 +97,31 @@ class TermoAutoPlayer:
             letter_text = letter.text
 
             if " place" in cls: # Yellow letters have class = "letter place"
-                letterState = "🟨"
+                letter_state = "🟨"
             elif " right" in cls:# Green letters have class = "letter right"
-                letterState = "🟩"
+                letter_state = "🟩"
             elif " wrong" in cls:# Wrong letters have class = "letter wrong"
-                letterState = "⬛"
+                letter_state = "⬛"
             else:
-                letterState = "" # Other letters have class in ["letter empty", "letter edit", "letter"]
+                letter_state = "" # Other letters have class in ["letter empty", "letter edit", "letter"]
 
             # Assign to corresponding (row, column)
-            state[int(letter_row)][int(letter_idx)] = letterState
+            hints[int(letter_row)][int(letter_idx)] = letter_state
+            words[int(letter_row)][int(letter_idx)] = letter_text
 
         # Join the state into a single string for simplicity
-        output = []
-        for s in state:
-          output.append("".join(s))
-        return "\n".join(output)
+        output = {}
+
+        def join_lines(line):
+            out = []
+            for s in line:
+                out.append("".join(s))
+            return out
+
+        output["hints"] = join_lines(hints)
+        output["words"] = join_lines(words)
+
+        return output
 
 
 if __name__=="__main__":

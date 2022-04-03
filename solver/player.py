@@ -11,7 +11,7 @@ def play_termo(player:TermoAutoPlayer):
     while i < 6:
         state = player.get_state()
 
-        matches = [match for match in state.split("\n") if len(match) > 0]
+        matches = state["hints"]
 
         if matches[-1] == "🟩🟩🟩🟩🟩":
             print("you won!")
